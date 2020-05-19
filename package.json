@@ -1,0 +1,23 @@
+{
+  "name": "sciencework",
+  "version": "1.0.0",
+  "description": "",
+  "main": "swork.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoNiceElijah/ScienceWork.git"
+  },
+  "author": "SoNiceElijah",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SoNiceElijah/ScienceWork/issues"
+  },
+  "homepage": "https://github.com/SoNiceElijah/ScienceWork#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pug": "^2.0.4"
+  }
+}

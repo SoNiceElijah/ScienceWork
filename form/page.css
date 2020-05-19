@@ -1,0 +1,171 @@
+body {
+    margin: 0;
+    background: #e9e9e9;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    min-width: 1200px;
+    min-height: 800px;
+}
+
+.left-bar {
+    width: 300px;
+    height: 100%;
+
+    background: #2a2a2e;
+    color: #e4e4e4;
+
+    position: relative;
+}
+
+.switchers {
+    height: 40px;
+
+
+    display: flex;
+
+    line-height: 40px;
+    user-select: none;
+}
+
+.swb {
+    width: 150px;
+    text-align: center;
+
+    cursor: pointer;
+}
+
+.left-bar .switchers .swb {
+    background: #202024;
+}
+
+.left-bar .switchers .swb:hover {
+    background: #1a1a1d;
+}
+
+
+.left-bar .switchers .swb[selected] {
+    background: #2a2a2e;
+}
+
+.container {
+    padding-right: 20px;
+}
+
+.container h1 {
+    padding-left: 20px;
+    font-weight: 300;
+
+    font-size: 24px;
+
+    margin: 20px 0 20px 0;
+}
+
+.form {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.full-form {
+    width: 260px;
+}
+
+.left-bar-content input {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 16px;
+
+    padding: 10px;
+    border: none;
+
+    border-radius: 5px;
+
+    outline: none;
+    background: #1a1a1d;
+
+    color: #e4e4e4;
+    width: 100%;
+}
+
+.left-bar-content {
+    padding: 0 0 20px 0;
+}
+
+.form-label {
+    padding: 5px 0 5px 0;
+}
+
+.button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+
+    width: 260px;
+    height: 40px;
+    line-height: 40px;
+
+    border-radius: 5px;
+    text-align: center;
+
+    user-select: none;
+    cursor: pointer;
+
+    background: #1a1a1d;
+}
+
+.button:hover {
+    background: #131314;
+}
+
+.right-bar {
+    width: calc(100% - 300px);
+}
+
+.top-one {
+    display: flex;
+    height: 100%;
+}
+
+.right-bar .switchers {
+    background: #d8d8d8;
+}
+
+
+.right-bar .switchers .swb:hover {
+    background: #c7c7c7;
+}
+
+.right-bar .switchers .swb[selected] {
+    background: #e9e9e9;
+}
+
+.container {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.charts {
+    width: calc(100% - 20px);
+    padding-left: 20px;
+    display: flex;
+
+    height: calc(100% - 40px);
+}
+
+.chart-2 {
+    flex: 1;
+    display: flex;
+
+    flex-direction: column;
+}
+
+.chart-content-4 {
+    flex: 1;
+}
+
+.chart-content-2 {
+    flex: 1;
+}
+
+
