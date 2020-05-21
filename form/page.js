@@ -39,15 +39,15 @@ $('.swb').click(e => {
 })
 
 
-createChart('ch1','Ipre',0,1);
+createChart('ch1','Ipre',null,true);
 createChart('ch2','X');
 createChart('ch3','IEPSCs');
 createChart('ch4','V');
-createChart('ch5','P(t)');
-createChart('ch6','P(A)');
+createChart('ch5','P(t)','t, ms');
+createChart('ch6','P(A)','A, A/cm^2');
 
 
-function createChart(id,name, min, max)
+/* function createChart(id,name, min, max)
 {
     let options = {
         elements: {
@@ -68,7 +68,8 @@ function createChart(id,name, min, max)
                         suggestedMax: max
                     }
                 }]
-            }
+            },
+            animation: false
         }
     };
 
@@ -87,7 +88,7 @@ function createChart(id,name, min, max)
         },
         options
     });
-}
+} 
 
 function updateChart(id,data)
 {
@@ -102,13 +103,78 @@ function addToChart(id, data)
     charts[id].data.labels.push( ...(data.x));
     charts[id].data.datasets[0].data.push(...(data.y));
 
-    if(charts[id].data.labels.length > 600)
+    if(charts[id].data.labels.length > 302)
     {
-        charts[id].data.labels = charts[id].data.labels.slice(200);
-        charts[id].data.datasets[0].data = charts[id].data.datasets[0].data.slice(200);
+        charts[id].data.labels = charts[id].data.labels.slice(2);
+        charts[id].data.datasets[0].data = charts[id].data.datasets[0].data.slice(2);
     }
 
     charts[id].update();
+} */
+
+function createChart(id,name, xAxis, max)
+{
+    let mode = 'linear'
+    if(max)
+    {
+        mode = 'hv';
+    }
+    if(!xAxis)
+    {
+        xAxis = "t, seconds";
+    }
+
+    console.log(document.getElementById(id).clientHeight);
+    const layout = {
+        autosize: false,
+        width: document.getElementById(id).clientWidth,
+        height: document.getElementById(id).clientHeight,
+        paper_bgcolor: '#e9e9e9',
+        plot_bgcolor: '#e9e9e9',
+        margin: {
+            l: 70,
+            r: 30,
+            b: 40,
+            t: 10,
+            pad: 4
+          },
+        xaxis: {
+            title: {
+                text: xAxis,
+            }
+        },
+        yaxis: {
+            title: {
+                text: name,
+            }
+        }
+    }
+
+
+    Plotly.newPlot(document.getElementById(id),[{ x: [], y : [], mode : 'lines', line : {shape : mode}}],layout);
+}
+
+function updateChart(id,data)
+{
+    let div = document.getElementById(id);
+    div.data[0].x = data.x;
+    div.data[0].y = data.y;
+    Plotly.redraw(div);
+}
+
+function addToChart(id,data)
+{
+    let div = document.getElementById(id);
+    div.data[0].x = div.data[0].x.concat(data.x);
+    div.data[0].y = div.data[0].y.concat(data.y);
+
+    if(div.data[0].x.length > 901)
+    {
+        div.data[0].x = div.data[0].x.slice(1);
+        div.data[0].y = div.data[0].y.slice(1);
+    }
+
+    Plotly.redraw(div);
 }
 
 function PoissonDestribution(l,x)
@@ -146,8 +212,7 @@ function fuctorial(n)
     return n * fuctorial(n-1);
 }
 
-createPoisson(3);
-function createPoisson(l)
+function createPoisson(id,l)
 {
     let xs = [];
     let ys = [];
@@ -158,13 +223,14 @@ function createPoisson(l)
         ys.push(PoissonDestribution(l,i));
     }
 
-    updateChart('ch5',{x : xs, y : ys});
+    updateChart(id,{x : xs, y : ys});
 }
 
 document.getElementById('go').onclick = () => {
     
     if(!DataProccesing)
     {
+        clearCharts();
         DataProccesing = true;
         fillConstants();
         Run();
@@ -174,7 +240,18 @@ document.getElementById('go').onclick = () => {
     {
         DataProccesing = false;
         document.getElementById('go').innerHTML = 'go';
+
     }
 }
 
 updateChart('ch1',{x : [0], y : [0]});
+
+function clearCharts()
+{
+    updateChart('ch1',{x : [0], y : [0]});
+    updateChart('ch2',{x : [], y : []});
+    updateChart('ch3',{x : [], y : []});
+    updateChart('ch4',{x : [], y : []});
+    updateChart('ch5',{x : [], y : []});
+    updateChart('ch6',{x : [], y : []});
+}

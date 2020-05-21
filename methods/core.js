@@ -3,45 +3,65 @@ let C = {} //constants;
 function fillConstants()
 {
     C = {
-        gna : 120,
-        gk : 36,
-        gl : 0.3,
-        ENa : 50,
-        Ek : -77,
-        El : -54.4,
-        Ith : 5.7,
-        thg : 0.7,
-        thd : 0.7,
-        thx : 0.7,
-        k0 : 2,
-        ax : 0.1,
-        ag : 0.01,
-        ad : 0.01,
-        kg : 0.1,
-        ai : 0.1,
-        gammag : 0,
-        gammad : 1,
+        
         tj : -1,
         tau : -1,
-        kd : 0.1,
+
         A : (t) => {
             return 0.16;
         },
         Ipre : (t) => {
             if(t > C.tj + C.tau) 
             {
-                C.tj = t + PlayPoisson(3);
-                C.tau = PlayPoisson(3);
+                C.tj = t + PlayPoisson(C.fin);
+                C.tau = PlayPoisson(C.fin);
             }  
 
             if(t > C.tj && t < C.tj + C.tau)
                 return 1;
             
             return 0;
-        },
+        }
+    }
+
+    $('.left-bar-content input').each(function (e) {
+        C[this.id] = parseFloat(this.value);
+    })
+
+    /* C = {
+        gna : 120,
+        gk : 36,
+        gl : 0.3,
+
+        ENa : 50,
+        Ek : -77,
+        El : -54.4,
+
+        Ith : 5.7,
+
+        thg : 0.7,
+        thd : 0.7,
+        thx : 0.7,
+
+        k0 : 2,
+
+        ax : 0.1,
+        ag : 0.01,
+        ad : 0.01,
+
+        kg : 0.1,
+        ai : 0.1,
+
+        gammag : 0,
+        gammad : 1,
+
+        kd : 0.1,
+
         C : 100,
         kx : 0.01,
-    }
+    } */
+
+    console.log(C);
 }
 
 function DXDT(params)
@@ -162,7 +182,10 @@ let BucketIpre = [];
 
 function Run()
 {
-    p = [0,0.1,0.1,0.0001,0.1,-190,0.0001,0.0001,0.0001];
+    createPoisson('ch5',C.fin);
+    createPoisson('ch6',C.b0);
+
+    p = [0.0,0,0.1,0.0001,0.1,-190,0.0001,0.0001,0.0001];
     f = [
         () => 1,
         DXDT,
@@ -181,15 +204,14 @@ function Run()
             return;
 
         Bucket.push(p);
-        console.log(p);
         BucketIpre.push(C.Ipre(p[0]));
         p = RK4(f,p,0.5);
         
         
-        if(Bucket.length > 100)
+        if(Bucket.length > 1)
             DrawBucket();
 
-        setTimeout(step,10);
+        setTimeout(step,5);
 
     }
 
@@ -199,22 +221,22 @@ function Run()
 function DrawBucket()
 {
     addToChart('ch1',{
-        x : Bucket.map(e => (e[0]/1000).toFixed(2)),
+        x : Bucket.map(e => (e[0]/1000)),
         y : BucketIpre
     });
 
     addToChart('ch2',{
-        x : Bucket.map(e => (e[0]/1000).toFixed(2)),
+        x : Bucket.map(e => (e[0]/1000)),
         y : Bucket.map(e => e[1])
     });
 
     addToChart('ch3',{
-        x : Bucket.map(e => (e[0]/1000).toFixed(2)),
+        x : Bucket.map(e => (e[0]/1000)),
         y : Bucket.map(e => e[3])
     });
 
     addToChart('ch4',{
-        x : Bucket.map(e => (e[0]/1000).toFixed(2)),
+        x : Bucket.map(e => (e[0]/1000)),
         y : Bucket.map(e => e[5])
     });
 

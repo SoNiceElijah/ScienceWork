@@ -11,6 +11,8 @@ body {
     width: 300px;
     height: 100%;
 
+    overflow: auto;
+
     background: #2a2a2e;
     color: #e4e4e4;
 
@@ -158,6 +160,7 @@ body {
     display: flex;
 
     flex-direction: column;
+    padding-bottom: 10px;
 }
 
 .chart-content-4 {
@@ -168,4 +171,7 @@ body {
     flex: 1;
 }
 
-
+.half-form  {
+    width: 110px;
+    display: inline-block;
+}

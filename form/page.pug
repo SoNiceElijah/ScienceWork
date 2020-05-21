@@ -1,6 +1,7 @@
 html
     head
         title WORK
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
          script(src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js")
         style
@@ -13,46 +14,107 @@ html
                     #sw2.swb Advanced
                 .left-bar-content#lbc
                     .container.visible#c1 
-                        h1 Settings
 
                         .form.full-form
-                            .form-label fin
-                            input#fin(type="text", name="fin")
+                            .form-label f<sub><b>in</b></sub>
+                            input#fin(type="text", name="fin", value="3")
 
                         .form.full-form
-                            .form-label b0
-                            input#fin(type="text", name="b0")
+                            .form-label b<sub>0</sub>
+                            input#b0(type="text", name="b0", value="5")
+
+                        .form.full-form
+                            .form-label C
+                            input#C(type="text", name="fin", value="100")
 
                         .button#go go
 
                     .container#c2
-                        h1 Advanced
+
+                        .form.half-form 
+                            .form-label k<sub>0</sub> 
+                            input#k0(type="text", name="fin", value="2.0")
+                        .form.half-form
+                            .form-label &alpha;<sub>X</sub>
+                            input#ax(type="text", name="fin", value="0.1")
+                        .form.half-form
+                            .form-label &alpha;<sub>G</sub>
+                            input#ag(type="text", name="fin", value="0.01")
+                        .form.half-form
+                            .form-label &theta;<sub>G</sub>
+                            input#thg(type="text", name="fin", value="0.7")
+                        .form.half-form 
+                            .form-label k<sub>G</sub>
+                            input#kg(type="text", name="fin", value="0.1")
+                        .form.half-form
+                            .form-label &gamma;<sub>G</sub>
+                            input#gammag(type="text", name="fin", value="0.0")
+                        .form.half-form
+                            .form-label &gamma;<sub>D</sub>
+                            input#gammad(type="text", name="fin", value="1.0")
+                        .form.half-form
+                            .form-label &theta;<sub>X</sub>
+                            input#thx(type="text", name="fin", value="0.7")
+                        .form.half-form
+                            .form-label &theta;<sub>D</sub>
+                            input#thd(type="text", name="fin", value="0.7")
+                        .form.half-form
+                            .form-label k<sub>X</sub>
+                            input#kx(type="text", name="fin", value="0.01")
+                        .form.half-form
+                            .form-label k<sub>D</sub>
+                            input#kd(type="text", name="fin", value="0.1")
+                        .form.half-form
+                            .form-label &alpha;<sub>D</sub>
+                            input#ad(type="text", name="fin", value="0.01")
+                        .form.half-form
+                            .form-label g<sub>Na</sub>
+                            input#gna(type="text", name="fin", value="120")
+                        .form.half-form
+                            .form-label g<sub>k</sub>
+                            input#gk(type="text", name="fin", value="36")
+                        .form.half-form
+                            .form-label g<sub>l</sub>
+                            input#gl(type="text", name="fin", value="0.3")
+                        .form.half-form
+                            .form-label E<sub>Na</sub>
+                            input#ENa(type="text", name="fin", value="50")
+                        .form.half-form
+                            .form-label E<sub>k</sub>
+                            input#Ek(type="text", name="fin", value="-77")
+                        .form.half-form
+                            .form-label E<sub>l</sub>
+                            input#El(type="text", name="fin", value="-54.4")
+                        .form.half-form
+                            .form-label I<i>th</i>
+                            input#Ith(type="text", name="fin", value="5.7")
+                        .form.half-form
+                            .form-label &alpha;<sub>I</sub>
+                            input#ai(type="text", name="fin", value="0.1")
+
 
             .right-bar
                 .switchers
                     #sw3.swb(selected="selected") Charts
-                    #sw4.swb Data table
 
                 .right-bar-content#rbc
                     .container.visible#c3
                         .charts
                             .chart-2
-                                .chart-content-4
-                                    canvas#ch1
-                                .chart-content-4
-                                    canvas#ch2
-                                .chart-content-4
-                                    canvas#ch3
-                                .chart-content-4
-                                    canvas#ch4
+                                .chart-content-4#ch1
+                                    
+                                .chart-content-4#ch2
+                                    
+                                .chart-content-4#ch3
+                                    
+                                .chart-content-4#ch4
+                                    
                             .chart-2
-                                .chart-content-2
-                                    canvas#ch5
-                                .chart-content-2
-                                    canvas#ch6
+                                .chart-content-2#ch5
+                                    
+                                .chart-content-2#ch6
+                                   
 
-                    .container#c4
-                        h1 Data table
 
         script
             include ./page.js
