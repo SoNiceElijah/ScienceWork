@@ -4,17 +4,16 @@ function fillConstants()
 {
     C = {
         
-        tj : -1,
-        tau : -1,
+        tj : -2,
+        tau : 1,
 
-        A : (t) => {
-            return 0.16;
+        A : (Yd) => {
+            return (PlayRayleigh(C.b0*(1 + C.gammad*Yd))) * 1e-6;
         },
         Ipre : (t) => {
             if(t > C.tj + C.tau) 
             {
                 C.tj = t + PlayPoisson(C.fin);
-                C.tau = PlayPoisson(C.fin);
             }  
 
             if(t > C.tj && t < C.tj + C.tau)
@@ -61,6 +60,7 @@ function fillConstants()
         kx : 0.01,
     } */
 
+    C.fin = Math.floor((1.0 / C.fin) * 1000);
     console.log(C);
 }
 
@@ -85,8 +85,9 @@ function DIepscsDT(params)
 {
     let iepscs = params[3];
     let ipre = C.Ipre(params[0]);
+    let yd = params[4];
 
-    return -C.ai*(iepscs + C.A() * H(ipre - 0.5));
+    return -C.ai*(iepscs + C.A(yd) * H(ipre - 0.5));
 }
 
 function DYdDT(params)
@@ -180,12 +181,70 @@ function H(x)
 let Bucket = [];
 let BucketIpre = [];
 
+function GeenratorTest()
+{
+    createPoisson('ch7',C.fin);
+    createRayleigh('ch8',C.b0);
+
+    let pt = [];
+    let rt = [];
+
+    for(let i = 0; i < 100000; ++i)
+    {
+        pt.push(PlayPoisson(C.fin));
+    }
+
+    for(let i = 0; i < 100000; ++i)
+    {
+        rt.push(PlayRayleigh(C.b0));
+    }
+
+    let xs = [];
+    let ys = [];
+    for(let i = 0; i < 26; ++i)
+    {
+        xs.push(i);
+        ys.push(pt.reduce((acc,el) => {
+            if(el == i)
+                acc += 1;
+            return acc;
+        },0) / pt.length)
+    }
+
+    updateChart('ch7',{x:xs,y:ys},1);
+
+    xs = [];
+    ys = [];
+
+    for(let i = 0; i < 25.01; i+=0.2)
+    {
+        xs.push(i);
+        ys.push(rt.reduce((acc,el) => {
+            if(Math.abs(i - el) < 0.1)
+                acc += 1;
+            return acc;
+        },0) / (rt.length*0.2))
+    }
+
+    updateChart('ch8',{x:xs,y:ys},1);
+}
+
 function Run()
 {
     createPoisson('ch5',C.fin);
-    createPoisson('ch6',C.b0);
+    createRayleigh('ch6',C.b0);
 
-    p = [0.0,0,0.1,0.0001,0.1,-190,0.0001,0.0001,0.0001];
+    p = [
+        0.0, //0 t
+        0.0, //1 X
+        0.0, //2 Yg
+        0.0, //3 Iepscs
+        0.0, //4 Yd
+        0.0, //5 V
+        0.0000, //6 n
+        0.0000, //7 m
+        0.0000 //8 h
+    ];
     f = [
         () => 1,
         DXDT,
@@ -203,15 +262,18 @@ function Run()
         if(!DataProccesing)
             return;
 
-        Bucket.push(p);
-        BucketIpre.push(C.Ipre(p[0]));
-        p = RK4(f,p,0.5);
+        for(let i = 0; i < 100; ++i)
+        {
+            Bucket.push(p);
+            BucketIpre.push(C.Ipre(p[0]));
+            p = RK4(f,p,0.1);
+        }
         
         
         if(Bucket.length > 1)
             DrawBucket();
 
-        setTimeout(step,5);
+        setTimeout(step,80);
 
     }
 
@@ -241,4 +303,5 @@ function DrawBucket()
     });
 
     Bucket = [];
+    BucketIpre = [];
 }

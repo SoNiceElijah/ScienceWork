@@ -43,11 +43,18 @@ createChart('ch1','Ipre',null,true);
 createChart('ch2','X');
 createChart('ch3','IEPSCs');
 createChart('ch4','V');
-createChart('ch5','P(t)','t, ms');
-createChart('ch6','P(A)','A, A/cm^2');
+createChart('ch5','P(t)','t, ms', null,'bar');
+createChart('ch6','P(A)','A, 1e^-6 A/cm^2');
 
+createChart('ch7','Poisson','x', null,'bar','teoretical');
+createChart('ch8','Rayleigh ','x',null,'lines','teoretical');
 
-/* function createChart(id,name, min, max)
+createChartData('ch7','bar','experemental');
+createChartData('ch8','lines','experemental');
+
+document.getElementById('c4').classList.remove('visible');
+
+let test_b = `function createChart(id,name, min, max)
 {
     let options = {
         elements: {
@@ -110,9 +117,9 @@ function addToChart(id, data)
     }
 
     charts[id].update();
-} */
+} `;
 
-function createChart(id,name, xAxis, max)
+function createChart(id,name, xAxis, max, type, dataName = "")
 {
     let mode = 'linear'
     if(max)
@@ -134,8 +141,8 @@ function createChart(id,name, xAxis, max)
         margin: {
             l: 70,
             r: 30,
-            b: 40,
-            t: 10,
+            b: 50,
+            t: 50,
             pad: 4
           },
         xaxis: {
@@ -150,55 +157,55 @@ function createChart(id,name, xAxis, max)
         }
     }
 
+    let data = {
+        x: [], y : [], mode : 'lines', line : {shape : mode},
+        name : dataName
+    }
+    if(type)
+        data['type'] = type;
+    else
+        data['type'] = 'lines';
 
-    Plotly.newPlot(document.getElementById(id),[{ x: [], y : [], mode : 'lines', line : {shape : mode}}],layout);
+    Plotly.newPlot(document.getElementById(id),[data],layout);
 }
 
-function updateChart(id,data)
+function createChartData(id,mode, name="")
 {
     let div = document.getElementById(id);
-    div.data[0].x = data.x;
-    div.data[0].y = data.y;
+
+    let data = {
+        x: [], y : [], type : mode, name : name
+    }
+
+    div.data.push(data)
     Plotly.redraw(div);
 }
 
-function addToChart(id,data)
+function updateChart(id,data,layer=0)
 {
     let div = document.getElementById(id);
-    div.data[0].x = div.data[0].x.concat(data.x);
-    div.data[0].y = div.data[0].y.concat(data.y);
-
-    if(div.data[0].x.length > 901)
-    {
-        div.data[0].x = div.data[0].x.slice(1);
-        div.data[0].y = div.data[0].y.slice(1);
-    }
-
+    div.data[layer].x = data.x;
+    div.data[layer].y = data.y;
     Plotly.redraw(div);
 }
 
-function PoissonDestribution(l,x)
+function addToChart(id,data,layer=0)
 {
-    return (Math.pow(l,x) / fuctorial(x))*Math.exp(-l);
-}
+    let div = document.getElementById(id);
+    div.data[layer].x = div.data[layer].x.concat(data.x);
+    div.data[layer].y = div.data[layer].y.concat(data.y);
 
-function PlayPoisson(l)
-{
-    let k = 0;
+    let n = div.data[layer].x.length;
 
-    let left = 0;
-    let right = left + PoissonDestribution(l,k);
-
-    let x = Math.random();
-
-    while(left > x || right < x)
+    while((div.data[layer].x[n-1] - div.data[layer].x[0]) > 0.5)
     {
-        ++k;
-        left = right;
-        right = left + PoissonDestribution(l,k);
+        div.data[layer].x.shift();
+        div.data[layer].y.shift();
+
+        n = div.data[layer].x.length;
     }
 
-    return k;
+    Plotly.redraw(div);
 }
 
 function fuctorial(n)
@@ -212,28 +219,15 @@ function fuctorial(n)
     return n * fuctorial(n-1);
 }
 
-function createPoisson(id,l)
-{
-    let xs = [];
-    let ys = [];
-
-    for(let i = 0; i < 26; ++i)
-    {
-        xs.push(i);
-        ys.push(PoissonDestribution(l,i));
-    }
-
-    updateChart(id,{x : xs, y : ys});
-}
-
 document.getElementById('go').onclick = () => {
-    
+
     if(!DataProccesing)
     {
         clearCharts();
         DataProccesing = true;
         fillConstants();
         Run();
+        
         document.getElementById('go').innerHTML = 'stop';
     }
     else
@@ -244,14 +238,34 @@ document.getElementById('go').onclick = () => {
     }
 }
 
+document.getElementById('gen').onclick = () => {
+    clearCharts(1);
+
+    fillConstants();
+    GeenratorTest();
+}
+
 updateChart('ch1',{x : [0], y : [0]});
 
-function clearCharts()
+function clearCharts(page = 0)
 {
-    updateChart('ch1',{x : [0], y : [0]});
-    updateChart('ch2',{x : [], y : []});
-    updateChart('ch3',{x : [], y : []});
-    updateChart('ch4',{x : [], y : []});
-    updateChart('ch5',{x : [], y : []});
-    updateChart('ch6',{x : [], y : []});
+
+    if(page == 0)
+    {
+        updateChart('ch1',{x : [0], y : [0]});
+        updateChart('ch2',{x : [], y : []});
+        updateChart('ch3',{x : [], y : []});
+        updateChart('ch4',{x : [], y : []});
+        updateChart('ch5',{x : [], y : []});
+        updateChart('ch6',{x : [], y : []});
+    }
+
+    if(page == 1)
+    {
+        updateChart('ch7',{x : [], y : []});
+        updateChart('ch8',{x : [], y : []});
+
+        updateChart('ch7',{x : [], y : []},1);
+        updateChart('ch8',{x : [], y : []},1);
+    }
 }
