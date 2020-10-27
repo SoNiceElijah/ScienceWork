@@ -23,9 +23,9 @@
     x[0] + x[1];
 
 #define D_FUNC7(x) \
-    x[0] + x[1];
+    x[3] + x[5];
 
 #define D_FUNC8(x) \
-    x[0] + x[1];
+    x[2] + x[7];
 
 #endif

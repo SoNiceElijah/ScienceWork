@@ -1,8 +1,6 @@
 #ifndef __RK4_H__
 #define __RK4_H__
 
-#include "funcs.hpp"
-
 #define FILLVECTOR(x,y) \
     x[0] = D_FUNC1(y) \
     x[1] = D_FUNC2(y) \
