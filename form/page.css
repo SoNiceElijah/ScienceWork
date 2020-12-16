@@ -185,6 +185,10 @@ body {
     bottom: 70px;
 }
 
+#analitics {
+    bottom: 120px;
+}
+
 #c5 {
     height: calc(100% - 40px);
 }

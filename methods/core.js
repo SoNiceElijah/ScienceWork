@@ -1,3 +1,4 @@
+
 let C = {} //constants;
 
 function fillConstants()
@@ -8,12 +9,12 @@ function fillConstants()
         tau : 1,
 
         A : (Yd) => {
-            return (PlayRayleigh(C.b0*(1 + C.gammad*Yd))) * 1e-6;
+            return (PlayRayleigh(C.b0*(1 + C.gammad*Yd)));
         },
         Ipre : (t) => {
             if(t > C.tj + C.tau) 
             {
-                C.tj = t + PlayPoisson(C.fin);
+                C.tj = t + (PlayPoisson(C.fin));
             }  
 
             if(t > C.tj && t < C.tj + C.tau)
@@ -229,12 +230,28 @@ function GeenratorTest()
     updateChart('ch8',{x:xs,y:ys},1);
 }
 
-function Run()
+let spikesData;
+function addSpikeIntervalDot(time) {
+    time = time / 1000;
+    spikesData.ts.push(time);
+}
+
+function releaseSpikeIntervals()
+{
+    let xs = [];
+    for(let t of spikesData.ts) xs.push(spikesData.pos);
+
+    console.log("Drawn");
+
+    addToChart('ch9',{x:xs,y:spikesData.ts},0,false);
+}
+
+function Run(scounter = false)
 {
     createPoisson('ch5',C.fin);
     createRayleigh('ch6',C.b0);
 
-    p = [
+    let p = [
         0.0, //0 t
         0.0, //1 X
         0.0, //2 Yg
@@ -245,7 +262,7 @@ function Run()
         0.0000, //7 m
         0.0000 //8 h
     ];
-    f = [
+    let f = [
         () => 1,
         DXDT,
         DYgDT,
@@ -257,48 +274,93 @@ function Run()
         DHiDT
     ];
 
+    console.log(C.gammad);
+
+    const threshold = 10;
+    let spike = false;
+    let under = true;
+
+    let spikec = 0;
+    let prevt = 0;
+
+    let size = 100;
+    let pause = 40;
+    let pack = 100;
+    spikesData = { pos : C.gammad, ts : [] };
+    if(scounter)
+    {       
+        size = 20000;
+        pause = 0;
+        pack = 1000;
+    }
+
     let step = () => {
 
         if(!DataProccesing)
             return;
 
-        for(let i = 0; i < 100; ++i)
+        let s = 0.001;
+        for(let i = 0; i < size; ++i)
         {
-            Bucket.push(p);
-            BucketIpre.push(C.Ipre(p[0]));
-            p = RK4(f,p,0.1);
-        }
-        
+            if(!scounter)
+            {
+                Bucket.push(p);
+                BucketIpre.push(C.Ipre(p[0]));
+            }
+            let next = p;
+            for(let j = 0; j < pack; ++j) 
+            {
+                next = RK4(f,next,s);
+            }
+
+            let v = next[5];
+            if(v > threshold && under) { spike = true; under = false; }
+            if(next[5] < p[5] && spike) 
+            {
+                addSpikeIntervalDot(p[0]);
+
+                ++spikec;
+                if(spikec >= 100) { releaseSpikeIntervals(); DataProccesing = false; return; };
+
+                spike = false;
+            }
+            if(v < threshold && !under) under = true;
+            p = next;
+        }        
         
         if(Bucket.length > 1)
             DrawBucket();
 
-        setTimeout(step,80);
-
+        if(!scounter)
+            setTimeout(step,pause);
+            
     }
 
-    step();
+    if(scounter) while(spikec < 100) step();
+    else step();
+
+
 }
 
 function DrawBucket()
 {
     addToChart('ch1',{
-        x : Bucket.map(e => (e[0]/1000)),
+        x : Bucket.map(e => (e[0] / 1000)),
         y : BucketIpre
     });
 
     addToChart('ch2',{
-        x : Bucket.map(e => (e[0]/1000)),
+        x : Bucket.map(e => (e[0] / 1000)),
         y : Bucket.map(e => e[1])
     });
 
     addToChart('ch3',{
-        x : Bucket.map(e => (e[0]/1000)),
+        x : Bucket.map(e => (e[0] / 1000)),
         y : Bucket.map(e => e[3])
     });
 
     addToChart('ch4',{
-        x : Bucket.map(e => (e[0]/1000)),
+        x : Bucket.map(e => (e[0] / 1000)),
         y : Bucket.map(e => e[5])
     });
 

@@ -49,10 +49,15 @@ createChart('ch6','P(A)','A, 1e^-6 A/cm^2');
 createChart('ch7','Poisson','x', null,'bar','teoretical');
 createChart('ch8','Rayleigh ','x',null,'lines','teoretical');
 
+createChart('ch9','Analysis','Yg|Yd',null,'scatter',"",'markers');
+
 createChartData('ch7','bar','experemental');
 createChartData('ch8','lines','experemental');
 
+//createChartData('ch9','scatter','analysis');
+
 document.getElementById('c4').classList.remove('visible');
+document.getElementById('c5').classList.remove('visible');
 
 let test_b = `function createChart(id,name, min, max)
 {
@@ -119,7 +124,7 @@ function addToChart(id, data)
     charts[id].update();
 } `;
 
-function createChart(id,name, xAxis, max, type, dataName = "")
+function createChart(id,name, xAxis, max, type, dataName = "",smode="lines")
 {
     let mode = 'linear'
     if(max)
@@ -158,7 +163,7 @@ function createChart(id,name, xAxis, max, type, dataName = "")
     }
 
     let data = {
-        x: [], y : [], mode : 'lines', line : {shape : mode},
+        x: [], y : [], mode : smode, line : {shape : mode},
         name : dataName
     }
     if(type)
@@ -189,20 +194,22 @@ function updateChart(id,data,layer=0)
     Plotly.redraw(div);
 }
 
-function addToChart(id,data,layer=0)
+function addToChart(id,data,layer=0,check=true)
 {
     let div = document.getElementById(id);
     div.data[layer].x = div.data[layer].x.concat(data.x);
     div.data[layer].y = div.data[layer].y.concat(data.y);
 
-    let n = div.data[layer].x.length;
-
-    while((div.data[layer].x[n-1] - div.data[layer].x[0]) > 0.5)
+    if(check)
     {
-        div.data[layer].x.shift();
-        div.data[layer].y.shift();
+        let n = div.data[layer].x.length;
+        while((div.data[layer].x[n-1] - div.data[layer].x[0]) > 0.5)
+        {
+            div.data[layer].x.shift();
+            div.data[layer].y.shift();
 
-        n = div.data[layer].x.length;
+            n = div.data[layer].x.length;
+        }
     }
 
     Plotly.redraw(div);
@@ -238,6 +245,28 @@ document.getElementById('go').onclick = () => {
     }
 }
 
+document.getElementById('analitics').onclick = () => {
+    if(!DataProccesing)
+    {
+        document.getElementById('analitics').innerHTML = 'stop';
+
+        for(let yd = 0; yd <= 5; yd += 0.2)
+        {
+            DataProccesing = true;
+            document.getElementById('gammad').value = yd + '';
+            fillConstants();
+            Run(true);
+        }
+      
+        document.getElementById('analitics').innerHTML = 'produce';
+    }
+    else
+    {
+        DataProccesing = false;
+        document.getElementById('analitics').innerHTML = 'produce';
+    }
+}
+
 document.getElementById('gen').onclick = () => {
     clearCharts(1);
 
@@ -262,10 +291,15 @@ function clearCharts(page = 0)
 
     if(page == 1)
     {
-        updateChart('ch7',{x : [], y : []});
-        updateChart('ch8',{x : [], y : []});
+        updateChart('ch7',{x : [], y : []},0);
+        updateChart('ch8',{x : [], y : []},0);
 
         updateChart('ch7',{x : [], y : []},1);
         updateChart('ch8',{x : [], y : []},1);
+    }
+
+    if(page == 2)
+    {
+        updateChart('ch9',{x : [], y : []});
     }
 }

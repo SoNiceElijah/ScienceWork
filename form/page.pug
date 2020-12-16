@@ -27,8 +27,10 @@ html
                             .form-label C
                             input#C(type="text", name="fin", value="1")
 
+                        
                         .button#go go
                         .button#gen test generators
+                        .button#analitics produce
 
                     .container#c2
 
@@ -79,16 +81,16 @@ html
                             input#gl(type="text", name="fin", value="0.3")
                         .form.half-form
                             .form-label E<sub>Na</sub>
-                            input#ENa(type="text", name="fin", value="50e-3")
+                            input#ENa(type="text", name="fin", value="50")
                         .form.half-form
                             .form-label E<sub>k</sub>
-                            input#Ek(type="text", name="fin", value="-77e-3")
+                            input#Ek(type="text", name="fin", value="-77")
                         .form.half-form
                             .form-label E<sub>l</sub>
-                            input#El(type="text", name="fin", value="-54.4e-3")
+                            input#El(type="text", name="fin", value="-54.4")
                         .form.half-form
                             .form-label I<i>th</i>
-                            input#Ith(type="text", name="fin", value="5.7e-6")
+                            input#Ith(type="text", name="fin", value="5.7")
                         .form.half-form
                             .form-label &alpha;<sub>I</sub>
                             input#ai(type="text", name="fin", value="0.1")
@@ -98,6 +100,7 @@ html
                 .switchers
                     #sw3.swb(selected="selected") Charts
                     #sw4.swb Generators
+                    #sw5.swb Analysis
 
                 .right-bar-content#rbc
                     .container.visible#c3
@@ -119,6 +122,9 @@ html
                         .charts
                             .chart-2#ch7                                
                             .chart-2#ch8
+                    .container.visible#c5
+                        .charts
+                            .chart-2#ch9
                                 
                                    
 
