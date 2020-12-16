@@ -7,18 +7,6 @@ body {
     min-height: 800px;
 }
 
-.left-bar {
-    width: 300px;
-    height: 100%;
-
-    overflow: auto;
-
-    background: #d8d8d8;
-    color: #252525;
-
-    position: relative;
-}
-
 .switchers {
     height: 40px;
 
@@ -52,6 +40,8 @@ body {
 .container {
     padding-right: 20px;
     overflow-y: auto;
+
+    position: relative;
 }
 
 .container h1 {
@@ -68,7 +58,6 @@ body {
   }
 
 .form {
-    margin-top: 10px;
     padding-left: 20px;
 }
 
@@ -76,7 +65,11 @@ body {
     width: 260px;
 }
 
-.left-bar-content input {
+.right-bar-content {
+    padding-right: 120px;
+}
+
+input {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 16px;
 
@@ -92,20 +85,20 @@ body {
     width: 100%;
 }
 
-.left-bar-content {
-    padding: 0 0 20px 0;
+.v2 {
+    margin-top: 10px;
 }
 
 .form-label {
-    padding: 5px 0 5px 0;
+    margin-bottom: 5px;
 }
 
 .button {
     position: absolute;
     bottom: 20px;
-    left: 20px;
+    right: 20px;
 
-    width: 260px;
+    width: 100px;
     height: 40px;
     line-height: 40px;
 
@@ -115,6 +108,8 @@ body {
     user-select: none;
     cursor: pointer;
 
+    z-index: 10;
+
     background: #c0c2c7;
 }
 
@@ -123,7 +118,13 @@ body {
 }
 
 .right-bar {
-    width: calc(100% - 300px);
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
 }
 
 .top-one {

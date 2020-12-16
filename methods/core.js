@@ -262,18 +262,18 @@ function Run()
         if(!DataProccesing)
             return;
 
-        for(let i = 0; i < 100; ++i)
+        for(let i = 0; i < 10000; ++i)
         {
             Bucket.push(p);
             BucketIpre.push(C.Ipre(p[0]));
-            p = RK4(f,p,0.1);
+            p = RK4(f,p,0.001);
         }
         
         
         if(Bucket.length > 1)
             DrawBucket();
 
-        setTimeout(step,80);
+        setTimeout(step,500);
 
     }
 
@@ -300,6 +300,17 @@ function DrawBucket()
     addToChart('ch4',{
         x : Bucket.map(e => (e[0]/1000)),
         y : Bucket.map(e => e[5])
+    });
+
+    addToChart('ch9',{
+        x : Bucket.map(e => (e[0]/1000)),
+        y : Bucket.map(e => e[2])
+    });
+
+    
+    addToChart('ch10',{
+        x : Bucket.map(e => (e[0]/1000)),
+        y : Bucket.map(e => e[4])
     });
 
     Bucket = [];

@@ -49,10 +49,17 @@ createChart('ch6','P(A)','A, 1e^-6 A/cm^2');
 createChart('ch7','Poisson','x', null,'bar','teoretical');
 createChart('ch8','Rayleigh ','x',null,'lines','teoretical');
 
+createChart('ch9','Yg');
+createChart('ch10','Yd');
+
 createChartData('ch7','bar','experemental');
 createChartData('ch8','lines','experemental');
 
+
+
 document.getElementById('c4').classList.remove('visible');
+document.getElementById('c5').classList.remove('visible');
+document.getElementById('c6').classList.remove('visible');
 
 let test_b = `function createChart(id,name, min, max)
 {
@@ -221,7 +228,7 @@ function fuctorial(n)
 
 document.getElementById('go').onclick = () => {
 
-    if(!DataProccesing)
+    /*if(!DataProccesing)
     {
         clearCharts();
         DataProccesing = true;
@@ -235,7 +242,15 @@ document.getElementById('go').onclick = () => {
         DataProccesing = false;
         document.getElementById('go').innerHTML = 'go';
 
-    }
+    } */
+
+    $.post('/',{},(data) => {
+
+        console.log(data);
+
+        updateChart('ch1',{ x : data.map(d => d[0]), y : data.map(d => d[1])});
+        updateChart('ch2',{ x : data.map(d => d[0]), y : data.map(d => d[2])});
+    });
 }
 
 document.getElementById('gen').onclick = () => {
@@ -267,5 +282,13 @@ function clearCharts(page = 0)
 
         updateChart('ch7',{x : [], y : []},1);
         updateChart('ch8',{x : [], y : []},1);
+    }
+
+
+    if(page == 2)
+    {
+        updateChart('ch9',{x : [], y : []});
+        updateChart('ch10',{x : [], y : []});
+
     }
 }

@@ -13,13 +13,13 @@
 
 #define HVEC(v,s) \
     v[0] = s; \
-    v[1] = 0.0; \
-    v[2] = 0.0; \
-    v[3] = 0.0; \
-    v[4] = 0.0; \
-    v[5] = 0.0; \
-    v[6] = 0.0; \
-    v[7] = 0.0; \
+    v[1] = s; \
+    v[2] = s; \
+    v[3] = s; \
+    v[4] = s; \
+    v[5] = s; \
+    v[6] = s; \
+    v[7] = s;
 
 void rk4_step(float* point, float* next, float step = 0.01F);
 

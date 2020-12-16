@@ -3,6 +3,8 @@
 
 #include <immintrin.h>
 
+#include <iostream>
+
 void rk4_step(float* point, float* next, float step)
 {
     float HTMP[8];
@@ -25,13 +27,9 @@ void rk4_step(float* point, float* next, float step)
     float VALUES[8];
 
     __m256 h = _mm256_loadu_ps(HTMP);
-    h = _mm256_shuffle_ps(h,h,0x00);
     __m256 h2 = _mm256_loadu_ps(H2TMP);
-    h2 = _mm256_shuffle_ps(h2,h2,0x00);
     __m256 h6 = _mm256_loadu_ps(H6TMP);
-    h6 = _mm256_shuffle_ps(h6,h6,0x00);
-     __m256 i2 = _mm256_loadu_ps(S2);
-    i2 = _mm256_shuffle_ps(i2,i2,0x00);
+    __m256 i2 = _mm256_loadu_ps(S2);
 
     __m256 p0 = _mm256_loadu_ps(point+1);
 

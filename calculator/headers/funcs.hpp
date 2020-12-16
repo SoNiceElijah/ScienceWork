@@ -1,31 +1,28 @@
 #ifndef __FUNCS_H__
 #define __FUNCS_H__
 
-#define D_FUNCT(x) \
-    1;
-
 #define D_FUNC1(x) \
-    x[1];
+    -3*x[2] - 2*x[1];
 
 #define D_FUNC2(x) \
-    x[0] + x[1];
+    x[1];
 
 #define D_FUNC3(x) \
-    x[0] + x[1];
+    0;
 
 #define D_FUNC4(x) \
-    x[0] + x[1];
+    0;
 
 #define D_FUNC5(x) \
-    x[0] + x[1];
+    0;
 
 #define D_FUNC6(x) \
-    x[0] + x[1];
+    0;
 
 #define D_FUNC7(x) \
-    x[3] + x[5];
+    0;
 
 #define D_FUNC8(x) \
-    x[2] + x[7];
+    0;
 
 #endif
