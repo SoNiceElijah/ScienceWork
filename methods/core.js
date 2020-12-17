@@ -236,6 +236,7 @@ function addSpikeIntervalDot(time) {
     spikesData.ts.push(time);
 }
 
+let chartLvl = 0;
 function releaseSpikeIntervals()
 {
     let xs = [];
@@ -243,10 +244,10 @@ function releaseSpikeIntervals()
 
     console.log("Drawn");
 
-    addToChart('ch9',{x:xs,y:spikesData.ts},0,false);
+    addToChart('ch9',{x:xs,y:spikesData.ts},chartLvl,false);
 }
 
-function Run(scounter = false)
+function Run(scounter = false,lvl=0)
 {
     createPoisson('ch5',C.fin);
     createRayleigh('ch6',C.b0);
@@ -274,7 +275,9 @@ function Run(scounter = false)
         DHiDT
     ];
 
+    chartLvl = lvl;
     console.log(C.gammad);
+    console.log(C.gammag);
 
     const threshold = 10;
     let spike = false;
@@ -285,13 +288,13 @@ function Run(scounter = false)
 
     let size = 100;
     let pause = 40;
-    let pack = 100;
-    spikesData = { pos : C.gammad, ts : [] };
+    let pack = 2;
+    spikesData = { pos : lvl == 0 ? C.gammag : C.gammad, ts : [] };
     if(scounter)
     {       
         size = 20000;
         pause = 0;
-        pack = 1000;
+        pack = 2;
     }
 
     let step = () => {
@@ -299,7 +302,7 @@ function Run(scounter = false)
         if(!DataProccesing)
             return;
 
-        let s = 0.001;
+        let s = 0.1;
         for(let i = 0; i < size; ++i)
         {
             if(!scounter)
@@ -318,9 +321,10 @@ function Run(scounter = false)
             if(next[5] < p[5] && spike) 
             {
                 addSpikeIntervalDot(p[0]);
+                prevt = p[0];
 
                 ++spikec;
-                if(spikec >= 100) { releaseSpikeIntervals(); DataProccesing = false; return; };
+                if(spikec >= 500) { releaseSpikeIntervals(); DataProccesing = false; return; };
 
                 spike = false;
             }
@@ -336,7 +340,7 @@ function Run(scounter = false)
             
     }
 
-    if(scounter) while(spikec < 100) step();
+    if(scounter) while(spikec < 500) step();
     else step();
 
 

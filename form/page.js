@@ -53,6 +53,7 @@ createChart('ch9','Analysis','Yg|Yd',null,'scatter',"",'markers');
 
 createChartData('ch7','bar','experemental');
 createChartData('ch8','lines','experemental');
+createChartData('ch9','scatter',null,'markers','rgba(255,0,0,1)')
 
 //createChartData('ch9','scatter','analysis');
 
@@ -164,7 +165,11 @@ function createChart(id,name, xAxis, max, type, dataName = "",smode="lines")
 
     let data = {
         x: [], y : [], mode : smode, line : {shape : mode},
-        name : dataName
+        name : dataName,
+        marker: {
+            symbol: 'circle',
+            size: 1
+        }
     }
     if(type)
         data['type'] = type;
@@ -174,12 +179,18 @@ function createChart(id,name, xAxis, max, type, dataName = "",smode="lines")
     Plotly.newPlot(document.getElementById(id),[data],layout);
 }
 
-function createChartData(id,mode, name="")
+function createChartData(id,mode, name="",smode = "lines",color)
 {
     let div = document.getElementById(id);
 
     let data = {
-        x: [], y : [], type : mode, name : name
+        x: [], y : [], mode : smode,type : mode, name : name,
+        marker: {
+            symbol: 'circle',
+            size: 2,
+            color : color
+        }
+        
     }
 
     div.data.push(data)
@@ -203,7 +214,7 @@ function addToChart(id,data,layer=0,check=true)
     if(check)
     {
         let n = div.data[layer].x.length;
-        while((div.data[layer].x[n-1] - div.data[layer].x[0]) > 0.5)
+        while((div.data[layer].x[n-1] - div.data[layer].x[0]) > 1)
         {
             div.data[layer].x.shift();
             div.data[layer].y.shift();
@@ -250,12 +261,23 @@ document.getElementById('analitics').onclick = () => {
     {
         document.getElementById('analitics').innerHTML = 'stop';
 
-        for(let yd = 0; yd <= 5; yd += 0.2)
+        document.getElementById('gammad').value = '0.0';
+
+        /*
+        for(let yg = -2.0; yg <= 0.0; yg += 0.1)
+        {
+            DataProccesing = true;
+            document.getElementById('gammag').value = yg + '';
+            fillConstants();
+            Run(true,0);
+        } */
+        document.getElementById('gammag').value = '0.0';
+        for(let yd = 0; yd <= 5.05; yd += 0.1)
         {
             DataProccesing = true;
             document.getElementById('gammad').value = yd + '';
             fillConstants();
-            Run(true);
+            Run(true,1);
         }
       
         document.getElementById('analitics').innerHTML = 'produce';
@@ -300,6 +322,7 @@ function clearCharts(page = 0)
 
     if(page == 2)
     {
-        updateChart('ch9',{x : [], y : []});
+        updateChart('ch9',{x : [], y : []},0);
+        updateChart('ch9',{x : [], y : []},1);
     }
 }

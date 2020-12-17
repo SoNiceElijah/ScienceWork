@@ -24,13 +24,13 @@ function PlayPoisson(l)
 
 function RayleighDistribution(a,x)
 {
-    return (x/(a*a))*Math.exp(-((x*x)/(2*a*a)));
+    return ((2*x)/(a*a))*Math.exp(-((x*x)/(a*a)));
 }
 
 function PlayRayleigh(a)
 {
     let x = Math.random();
-    return Math.sqrt(-2*a*a*Math.log(1-x));
+    return Math.sqrt(-a*a*Math.log(1-x));
 }
 
 function createPoisson(id,l)
