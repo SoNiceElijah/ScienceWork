@@ -50,10 +50,16 @@ createChart('ch7','Poisson','x', null,'bar','teoretical');
 createChart('ch8','Rayleigh ','x',null,'lines','teoretical');
 
 createChart('ch9','Analysis','Yg|Yd',null,'scatter',"",'markers');
+createChart('ch10','Analysis','Yg|Yd',null,'scatter',"",'markers');
+createChart('ch11','Analysis','Yg|Yd',null,'scatter',"",'lines+markers');
+
 
 createChartData('ch7','bar','experemental');
 createChartData('ch8','lines','experemental');
 createChartData('ch9','scatter',null,'markers','rgba(255,0,0,1)')
+createChartData('ch10','scatter',null,'markers','rgba(255,0,0,1)')
+createChartData('ch11','lines',null,'lines+markers','rgba(255,0,0,1)');
+
 
 //createChartData('ch9','scatter','analysis');
 
@@ -229,7 +235,7 @@ function addToChart(id,data,layer=0,check=true)
 function fuctorial(n)
 {
     if(n == 'undefined')
-        throw "OSHIBKA TUT";
+        throw "FACTORIAL SLOMALSIA";
 
     if(n == 0)
         return 1;
@@ -263,14 +269,13 @@ document.getElementById('analitics').onclick = () => {
 
         document.getElementById('gammad').value = '0.0';
 
-        /*
         for(let yg = -2.0; yg <= 0.0; yg += 0.1)
         {
             DataProccesing = true;
             document.getElementById('gammag').value = yg + '';
             fillConstants();
             Run(true,0);
-        } */
+        }
         document.getElementById('gammag').value = '0.0';
         for(let yd = 0; yd <= 5.05; yd += 0.1)
         {
@@ -324,5 +329,7 @@ function clearCharts(page = 0)
     {
         updateChart('ch9',{x : [], y : []},0);
         updateChart('ch9',{x : [], y : []},1);
+        updateChart('ch10',{x : [], y : []},0);
+        updateChart('ch10',{x : [], y : []},1);
     }
 }

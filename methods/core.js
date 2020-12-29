@@ -235,6 +235,10 @@ function addSpikeIntervalDot(time) {
     time = time / 1000;
     spikesData.ts.push(time);
 }
+function addRefactorIntervalDot(time) {
+    time = time / 1000;
+    spikesData.rs.push(time);
+}
 
 let chartLvl = 0;
 function releaseSpikeIntervals()
@@ -242,9 +246,11 @@ function releaseSpikeIntervals()
     let xs = [];
     for(let t of spikesData.ts) xs.push(spikesData.pos);
 
-    console.log("Drawn");
-
     addToChart('ch9',{x:xs,y:spikesData.ts},chartLvl,false);
+    addToChart('ch10',{x:xs,y:spikesData.rs},chartLvl,false);
+    addToChart('ch11',{x:spikesData.pos,y: (spikesData.size)/(spikesData.time / 1000)},chartLvl,false);
+
+    console.log("Drawn");
 }
 
 function Run(scounter = false,lvl=0)
@@ -286,14 +292,18 @@ function Run(scounter = false,lvl=0)
     let spikec = 0;
     let prevt = 0;
 
+    let restline = -62.3;
+    let rest = false;
+    let prevr = 0;
+
     let size = 100;
     let pause = 40;
     let pack = 2;
-    spikesData = { pos : lvl == 0 ? C.gammag : C.gammad, ts : [] };
+    spikesData = { pos : lvl == 0 ? C.gammag : C.gammad, ts : [], rs : [], time : 0, size : 0 };
     if(scounter)
     {       
         size = 20000;
-        pause = 0;
+        pause = 100;
         pack = 2;
     }
 
@@ -317,18 +327,31 @@ function Run(scounter = false,lvl=0)
             }
 
             let v = next[5];
+
+            if(v < restline && rest)
+            {
+                rest = false;
+                prevr = p[0];
+            }
+            if(v > restline && !rest)
+            {
+                rest = true;
+                addRefactorIntervalDot(p[0] - prevr);
+            }
+
             if(v > threshold && under) { spike = true; under = false; }
             if(next[5] < p[5] && spike) 
             {
-                addSpikeIntervalDot(p[0]);
+                addSpikeIntervalDot(p[0]-prevt);
                 prevt = p[0];
 
                 ++spikec;
-                if(spikec >= 500) { releaseSpikeIntervals(); DataProccesing = false; return; };
+                if(spikec >= C.SpCount) { spikesData.time = p[0]; spikesData.size = spikec; releaseSpikeIntervals(); DataProccesing = false; return; };
 
                 spike = false;
             }
             if(v < threshold && !under) under = true;
+
             p = next;
         }        
         
@@ -340,7 +363,7 @@ function Run(scounter = false,lvl=0)
             
     }
 
-    if(scounter) while(spikec < 500) step();
+    if(scounter) while(spikec < C.SpCount) step();
     else step();
 
 
